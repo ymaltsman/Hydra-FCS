@@ -458,7 +458,7 @@ setFunction({
         float x = a*pow(cos(u), 3.0);
         float y = a*pow(sin(u), 3.0);
         return vec2(_st.x*x, _st.y*y);
-    `
+    `,
 })
 
 setFunction({
