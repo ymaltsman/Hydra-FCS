@@ -413,7 +413,7 @@ setFunction({
     })
 
 setFunction({
-    name: 'iTest',
+    name: 'iInvoluteCircle',
     type: 'src',
     inputs: [
         {
@@ -436,6 +436,7 @@ setFunction({
         float theta = atan(y/x);
         float u = r*r - cos(theta+freq*time)*theta - 1.0;
         u = 1.0-mod(u, wrap);
+        //u = fract(u-time);
         return vec4(u, u, u, 1.0);
     `,
     })
@@ -449,7 +450,7 @@ setFunction({
     {
         type: 'float',
         name: 'a',
-        default: 1.0,
+        default: '1.0',
     },
     ],
     glsl: `
@@ -457,8 +458,8 @@ setFunction({
         float x = a*pow(cos(u), 3.0);
         float y = a*pow(sin(u), 3.0);
         return vec2(_st.x*x, _st.y*y);
-    `,
-    })
+    `
+})
 
 setFunction({
     name: 'pSpiral',
@@ -479,13 +480,13 @@ setFunction({
         {
         type: 'float',
         name: 'a',
-        default: 1.0,
+        default: 1,
         },
         {
         type: 'float',
         name: 'p',
         default: 2.0,
-        },
+        }
     ],
     glsl: `
         float u = length(_c0);
@@ -631,7 +632,7 @@ setFunction({
       float radius = a;
       float angle = length(_c0); // Use color length as the angle
       float x = radius * cos(angle);
-      float y = radius * sin(angle);
+      floaft y = radius * sin(angle);
       return vec2(_st.x*x, _st.y*y);
     `,
   })
@@ -744,4 +745,201 @@ setFunction({
       
       return vec2(x*_st.x, y*_st.y);
     `,
+  })
+
+//parametric surfaces
+
+setFunction({
+    name: 'pSphere',
+    type: 'src',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      {type: 'float', name: 'freq', default: 1.0},
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float x = (_st.x*2.0*3.14);
+        float y = (_st.y*2.0*3.14);
+        float r = a*cos(x)*sin(y);
+        r = fract(r-freq*time);
+        float g = a*sin(x)*sin(y);
+        g = fract(g+freq*time);
+        float b = a*cos(y);
+        b = fract(b+freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pMobiusStrip',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float x = (_st.x*2.0*3.14);
+        float y = (_st.y*2.0*3.14);
+        float r = (1.0+a*cos(x)/2.0)*cos(y);
+        r = fract(r-freq*time);
+        float g = (1.0+a*cos(x)/2.0)*sin(y);
+        g = fract(g+freq*time);
+        float b = a*sin(x);
+        b = fract(b+freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pCylinder',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float x = (_st.x*2.0*3.14);
+        float y = (_st.y*2.0*3.14);
+        float r = x;
+        r = fract(r-freq*time);
+        float g = a*cos(y);
+        g = fract(g+freq*time);
+        float b = a*sin(y);
+        b = fract(b+freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pKleinBottle',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'aa',
+        default: 1.0,
+      },
+      
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float u = (_st.x*2.0*3.14);
+        float v = (_st.y*2.0*3.14);
+        float r = (aa + cos(v / 2.0) * sin(u) - sin(v / 2.0) * sin(2.0 * u)) * cos(v);
+        r = fract(r-freq*time);
+        float g = (aa + cos(v / 2.0) * sin(u) - sin(v / 2.0) * sin(2.0 * u)) * sin(v);
+        g = fract(g+freq*time);
+        float b = sin(v / 2.0) * sin(u) + cos(v / 2.0) * sin(2.0 * u);
+        b = fract(b + freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pCrossCap',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'aa',
+        default: 1.0,
+      },
+      
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float u = (_st.x*2.0*3.14);
+        float v = (_st.y*2.0*3.14);
+        float r = (aa * aa) * (sin(u) * sin(2.0 * v) / 2.0);
+        r = fract(r-freq*time);
+        float g = (aa * aa) * (sin(2.0 * u) * cos(v) * cos(v));
+        g = fract(g-freq*time);
+        float b = (aa * aa) * (cos(2.0 * u) * cos(v) * cos(v));
+        b = fract(b + freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pSteiner',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'aa',
+        default: 1.0,
+      },
+      
+      
+  
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float u = (_st.x*2.0*3.14);
+        float v = (_st.y*2.0*3.14);
+        float r = (aa * aa / 2.0) * (sin(2.0 * u) * cos(v) * cos(v));
+        r = fract(r-freq*sin(time-u));
+        float g = (aa * aa / 2.0) * (sin(u) * sin(2.0 * v));
+        g = fract(g-freq*sin(time-r));
+        float b = (aa * aa / 2.0) * (cos(u) * sin(2.0 * v));
+        b = fract(b + freq*sin(time+g));
+        return vec4(r, g, b, 1.0);
+      `,
+  })
+
+  setFunction({
+    name: 'pTorus',
+    type: 'src',
+    inputs: [
+      {type: 'float', name: 'freq', default: 1.0},
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      {
+        type: 'float', name: 'c', default: .5,
+      },
+    ],
+    glsl: `
+        _st = _st * 2.0 - 1.0;
+        float u = (_st.x*2.0*3.14);
+        float v = (_st.y*2.0*3.14);
+        float r = (c + a*cos(v))*cos(u);
+        r = fract(r-freq*time);
+        float g = (c + a*cos(v))*sin(u);
+        g = fract(g-freq*time);
+        float b = sin(v);
+        b = fract(b + freq*time);
+        return vec4(r, g, b, 1.0);
+      `,
   })
