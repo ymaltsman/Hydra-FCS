@@ -436,7 +436,6 @@ setFunction({
         float theta = atan(y/x);
         float u = r*r - cos(theta+freq*time)*theta - 1.0;
         u = 1.0-mod(u, wrap);
-        //u = fract(u-time);
         return vec4(u, u, u, 1.0);
     `,
     })
