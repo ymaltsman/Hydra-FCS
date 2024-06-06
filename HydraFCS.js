@@ -450,7 +450,7 @@ setFunction({
     {
         type: 'float',
         name: 'a',
-        default: '1.0',
+        default: 1.0,
     },
     ],
     glsl: `
@@ -480,7 +480,7 @@ setFunction({
         {
         type: 'float',
         name: 'a',
-        default: 1,
+        default: 1.0,
         },
         {
         type: 'float',
