@@ -943,3 +943,122 @@ setFunction({
         return vec4(r, g, b, 1.0);
       `,
   })
+
+//implicit surfaces
+setFunction({
+    name: 'iSphere',
+    type: 'color',
+    inputs: [],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = r*r + g*g + b*b;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iCube',
+    type: 'color',
+    inputs: [],
+    glsl: `
+    	
+        float r = abs(_c0.r);
+        float g = abs(_c0.g);
+        float b = abs(_c0.b);
+        float u = max(max(r, g), b) - 1.0;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iTorus',
+    type: 'color',
+    inputs: [
+      {type: 'float', name: 'c', default: 0.5},
+      {type: 'float', name: 'a', default: 1.0},
+    ],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = pow(a - sqrt(r*r - g*g), 2.0) + b*b - c*c;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iPlane',
+    type: 'color',
+    inputs: [
+      {type: 'float', name: 'nx', default: 1.0}, //charge value
+      {type: 'float', name: 'ny', default: 1.0},
+      {type: 'float', name: 'nz', default: 1.0},
+    ],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = nx*r + ny*g + nz*b;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iSteiner',
+    type: 'color',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = pow(r*g,2.0) + pow(g*b, 2.0) + pow(b*r, 2.0) - a*a*r*g*b;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iWineGlass',
+    type: 'color',
+    inputs: [
+      {type: 'float', name: 'k', default: 3.2},
+    ],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = r*r + g*g - pow(log(b + k), 2.0) - .02;
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
+
+setFunction({
+    name: 'iGenus2',
+    type: 'color',
+    inputs: [
+      
+    ],
+    glsl: `
+    	
+        float r = _c0.r;
+        float g = _c0.g;
+        float b = _c0.b;
+        float u = 2.0*g*(g*g - 3.0*r*r)*(1.0-b*b) + pow(r*r + g*g, 2.0) - (9.0*b*b - 1.0)*(1.0 - b*b);
+        u = fract(u);
+        return vec4(u,u,u,1.0);
+    `
+})
