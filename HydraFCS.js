@@ -486,7 +486,7 @@ setFunction({
         type: 'float',
         name: 'p',
         default: 2.0,
-        }
+        },
     ],
     glsl: `
         float u = length(_c0);
