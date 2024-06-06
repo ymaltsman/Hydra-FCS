@@ -440,6 +440,34 @@ setFunction({
     `,
     })
 
+setFunction({
+    name: 'iTest',
+    type: 'src',
+    inputs: [
+        {
+        type: 'float',
+        name: 'freq',
+        default: 1.0, 
+        },
+        {
+        type: 'float',
+        name: 'wrap',
+        default: 10.0,
+        },
+        
+    ],
+    glsl: `
+        _st = _st * 4.0 - 2.0;
+        float x = _st.x;
+        float y = _st.y;
+        float r = length(_st);
+        float theta = atan(y/x);
+        float u = r*r - cos(theta+freq*time)*theta - 1.0;
+        u = 1.0-mod(u, wrap);
+        return vec4(u, u, u, 1.0);
+    `,
+    })
+
 //parametric curves
 
 setFunction({
