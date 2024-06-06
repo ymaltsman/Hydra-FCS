@@ -441,5 +441,308 @@ setFunction({
     `,
     })
 
-    
+//parametric curves
 
+setFunction({
+    name: 'pAstroid',
+    type: 'combineCoord',
+    inputs: [
+    {
+        type: 'float',
+        name: 'a',
+        default: '1.0',
+    },
+    ],
+    glsl: `
+        float u = length(_c0);
+        float x = a*pow(cos(u), 3.0);
+        float y = a*pow(sin(u), 3.0);
+        return vec2(_st.x*x, _st.y*y);
+    `
+})
+
+setFunction({
+    name: 'pSpiral',
+    type: 'combineCoord',
+    inputs: [],
+    glsl: `
+        float u = length(_c0);
+        float x = u*cos(u);
+        float y = u*sin(u);
+        return vec2(_st.x*x, _st.y*y);
+    `
+})
+
+setFunction({
+    name: 'pCardioid',
+    type: 'combineCoord',
+    inputs: [
+        {
+        type: 'float',
+        name: 'a',
+        default: 1,
+        },
+        {
+        type: 'float',
+        name: 'p',
+        default: 2.0,
+        }
+    ],
+    glsl: `
+        float u = length(_c0);
+        float x = a*(p*cos(u) - cos(p*u));
+        float y = a*(p*sin(u) - sin(p*u));
+        return vec2(_st.x*x, _st.y*y);
+    `
+})
+
+setFunction({
+    name: 'pConchoid',
+    type: 'combineCoord',
+    inputs: [
+        {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+        },
+        
+    ],
+    glsl: `
+        float u = length(_c0);
+        float x = .1*a + cos(u);
+        float y = .1*a*tan(u) + sin(u);
+        return vec2(_st.x*x, _st.y*y);
+    `
+})
+
+setFunction({
+    name: 'pEpicycloid',
+    type: 'combineCoord',
+    inputs: [
+    {type: 'float', name: 'a', default: 1.0},
+    {type: 'float', name: 'b', default: 1.0},
+    ],
+    glsl: `
+        float u = length(_c0);
+        float x = _st.x;
+        float y = _st.y;
+        float v = (a + b)*cos(u) - b*cos((a/b + 1.0)*u);
+        float w = (a + b)*sin(u) - b*sin((a/b + 1.0)*u);
+        return vec2(v*x,w*y);
+    `
+})
+
+setFunction({
+    name: 'pDescartesFolium',
+    type: 'combineCoord',
+    inputs: [
+    {type: 'float', name: 'a', default: 1.0},
+    {type: 'float', name: 'b', default: 1.0},
+    ],
+    glsl: `
+        float u = length(_c0);
+        float x = _st.x;
+        float y = _st.y;
+        float v = 3.0*a*u/(1.0 + pow(u, 3.0));
+        float w = 3.0*a*u*u/(1.0 + pow(u, 3.0));;
+        return vec2(v*x,w*y);
+    `
+})
+
+setFunction({
+    name: 'pHypocycloid',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      {
+        type: 'float',
+        name: 'b',
+        default: 2.0,
+      },
+    ],
+    glsl: `
+      float k = length(_c0);
+      float u = a * cos(b * k) + (a - b) * cos((a + b) * k);
+      float v = a * sin(b * k) + (a - b) * sin((a + b) * k);
+      return vec2(u*_st.x, v*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pHypotrochoid',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      {
+        type: 'float',
+        name: 'b',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'd',
+        default: 1.0,
+      },
+    ],
+    glsl: `
+      float k = length(_c0);
+      float u = (a - d) * cos(k) + d * cos((a / b + 1.0) * k);
+      float v = (a - d) * sin(k) + d * sin((a / b + 1.0) * k);
+      return vec2(u*_st.x, v*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pInvoluteCircle',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = 1.0; // Radius of the circle (can be adjusted)
+      
+      float u = length(_c0); // Use color length as control parameter
+      
+      float x = a*(cos(u) + u*sin(u)); 
+      float y = a*(sin(u) - u*cos(u));
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pCircle',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      }, // radius of the circle
+    ],
+    glsl: `
+      float radius = a;
+      float angle = length(_c0); // Use color length as the angle
+      float x = radius * cos(angle);
+      floaft y = radius * sin(angle);
+      return vec2(_st.x*x, _st.y*y);
+    `,
+  })
+
+  setFunction({
+    name: 'pLissajous',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 5.0,
+      }, // parameter for amplitude of first sine wave
+      {
+        type: 'float',
+        name: 'n',
+        default: 1.0,
+      }, // parameter for frequency of first sine wave
+      {
+        type: 'float',
+        name: 'b',
+        default: 1.0,
+      }, // parameter for amplitude of second sine wave
+      {
+        type: 'float',
+        name: 'phase',
+        default: 0.0,
+      }, // optional phase shift
+    ],
+    glsl: `
+      float colorLength = length(_c0); // Use color length as control parameter
+      float angle = colorLength; // Treat color length as the angle
+      
+      float x = a * sin(n * angle + phase);  // Use 'n' for frequency and 'a' for amplitude
+      float y = b * sin(angle);                // Use 'b' for amplitude
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pNephroid',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      }, // parameter for the radius of the nephroid
+    ],
+    glsl: `
+      float radius = a; // Use the input parameter 'a' for radius
+      float angle = length(_c0);  // Use color length as the angle
+      
+      // Nephroid equation using sine and cosine with angle from color length
+      float x = radius * (3.0 * cos(angle) - cos(3.0 * angle));
+      float y = radius * (3.0 * sin(angle) - sin(3.0 * angle));
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pPlateau',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'm',
+        default: 2.0,
+      }, // parameter for m (must not equal n)
+      {
+        type: 'float',
+        name: 'n',
+        default: 1.0,
+      }, // parameter for n (must not equal m)
+    ],
+    glsl: `
+      float colorLength = length(_c0);  // Use color length as control parameter
+      float angle = colorLength;  // Normalize and scale color length to angle
+  
+      // Ensure m and n are not equal (Plateau curve requirement)
+      if (abs(m - n) < 1e-6) {
+        m += 0.1; // Slightly alter m to avoid singularity
+      }
+    
+      float x = (sin((m + n) * angle)) / (sin((m - n) * angle));
+      float y = (2.0 * sin(m * angle) * sin(n * angle)) / (sin((m - n) * angle));
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+  setFunction({
+    name: 'pTalbot',
+    type: 'combineCoord',
+    inputs: [
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      }, // parameter for scale
+    ],
+    glsl: `
+      float colorLength = length(_c0);  // Use color length as control parameter
+      float angle = colorLength;        // No scaling needed, use color length directly
+  
+      // Talbot's curve equation with angle and scale
+      float x = a * pow(2.0 * cos(angle), 2.0) - 2.0 * a * cos(2.0 * angle) + 1.0;
+      float y = a * 2.0 * sin(angle) * cos(angle);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
