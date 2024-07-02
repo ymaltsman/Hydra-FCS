@@ -753,12 +753,13 @@ setFunction({
     name: 'pSphere',
     type: 'src',
     inputs: [
+      
+      {type: 'float', name: 'freq', default: 1.0},
       {
         type: 'float',
         name: 'a',
         default: 1.0,
       },
-      {type: 'float', name: 'freq', default: 1.0},
       
   
     ],
