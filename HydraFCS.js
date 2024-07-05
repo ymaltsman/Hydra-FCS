@@ -632,7 +632,7 @@ setFunction({
       float radius = a;
       float angle = length(_c0); // Use color length as the angle
       float x = radius * cos(angle);
-      floaft y = radius * sin(angle);
+      float y = radius * sin(angle);
       return vec2(_st.x*x, _st.y*y);
     `,
   })
