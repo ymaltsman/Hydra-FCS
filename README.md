@@ -44,6 +44,7 @@ We can feed these maps between each other in a large variety of ways. For exampl
 ```
 pTorus().
   pCardioid(iCardioid().pAstroid(pSphere())).
+  kaleid().
   iSphere().
   out()
 ```
