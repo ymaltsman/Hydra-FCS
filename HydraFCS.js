@@ -1191,3 +1191,99 @@ setFunction({
       return vec2(x*_st.x, y*_st.y);
     `,
   })
+
+//parametric hypersurfaces 
+
+setFunction({
+    name: 'hpSphere',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x11 = a*cos(r);
+      float x12 = a*sin(r)*cos(g);
+      float x21 = a*sin(g)*cos(b);
+      float x22 = a*sin(r)*sin(g)*sin(b);
+      vec2 s = _st*mat2(x11, x12, x21, x22);
+  
+      
+      return s;
+    `,
+  })
+
+setFunction({
+  	//source: https://people.math.harvard.edu/~knill/teaching/math22a2018/exhibits/threetorus/index.html
+    name: 'hpTorus',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'c', default: 1.0},
+      {type: 'float', name: 'a', default: .5},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x11 = (c + a*cos(r))*cos(g);
+      float x12 = (c + a*cos(r))*sin(g);
+      float x21 = (c + a*sin(r))*cos(b);
+      float x22 = (c + a*sin(r))*sin(b);
+      vec2 s = _st*mat2(x11, x12, x21, x22);
+  
+      
+      return s;
+    `,
+  })
+
+setFunction({
+  	//source: https://en.wikipedia.org/wiki/Hypercone
+    name: 'hpCone',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'c', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x11 = b*c*cos(r)*cos(g);
+      float x12 = b*c*cos(r)*sin(g);
+      float x21 = b*c*sin(r);
+      float x22 = b;
+      vec2 s = _st*mat2(x11, x12, x21, x22);
+  
+      
+      return s;
+    `,
+  })
+
+setFunction({
+  	//source: https://en.wikipedia.org/wiki/Hypercone
+    name: 'hpConeOblique',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'c', default: 1.0},
+      {type: 'float', name: 'vx', default: 1.0},
+      {type: 'float', name: 'vy', default: 1.0},
+      {type: 'float', name: 'vz', default: 1.0},
+      
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x11 = vx*b + b*c*cos(r)*cos(g);
+      float x12 = vy*b + b*c*cos(r)*sin(g);
+      float x21 = b*vz + b*c*sin(r);
+      float x22 = b;
+      vec2 s = _st*mat2(x11, x12, x21, x22);  
+      return s;
+    `,
+  })
