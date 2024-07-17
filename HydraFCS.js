@@ -1063,3 +1063,131 @@ setFunction({
         return vec4(u,u,u,1.0);
     `
 })
+
+//Inverse Parametric Surfaces
+
+setFunction({
+    name: 'ipSphere',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = atan(g/r); 
+      float y = acos(b/a);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipTorus',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = atan(g/r); 
+      float y = asin(b/a);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipMobiusStrip',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = atan(g/r); 
+      float y = b/sin(x/2.0);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipMobiusStrip',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = atan(g/r); 
+      float y = b/sin(x/2.0);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipCylinder',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = r; 
+      float y = atan(b/g);
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipKleinBottle',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float y = atan(g/r); 
+      float x = 2.0 * atan ( ((b / sin(y/2.0)) - cos(y/2.0) * tan(y))/ (sin(y/2.0) * (1.0 + tan(y)*tan(y))) );
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
+
+setFunction({
+    name: 'ipCrossCap',
+    type: 'combineCoord',
+    inputs: [
+      {type: 'float', name: 'a', default: 1.0},
+    ], 
+    glsl: `
+      float r = _c0.r;
+      float g = _c0.g;
+      float b = _c0.b;
+      
+      float x = 0.5*atan(g/b);
+      float y = 0.5*asin((2.0/(a*a))*r*(1.0/sin(x)));
+      
+      return vec2(x*_st.x, y*_st.y);
+    `,
+  })
