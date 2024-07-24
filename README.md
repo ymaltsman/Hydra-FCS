@@ -32,11 +32,31 @@ for $t \in [0, 2\pi]$. Parametric equations are maps from 1 to 2 dimensions, so 
 ```
 iCircle().pSpiral(iCardioid()).out()
 ```
-Surfaces can also be represented parametrically with two control parameters. They thus constiture maps from 2 to 3 dimensions, so we can use them to map from position to RGB color. For example:
+Surfaces can also be represented parametrically with two control parameters. For example, one can construct a torus of outer radius $c$ and tube radius $a$ by varying the parameters $\theta$ and $\phi$ from $0$ to $2\pi$ and plotting the equations
+
+$$
+x(\theta, \phi) = (c + a\cos(\phi))\cos(\theta)
+$$
+
+$$
+y(\theta, \phi) = (c + a\cos(\phi))\sin(\theta)
+$$
+
+$$
+z(\theta, \phi) = a\sin(\phi)
+$$
+
+They thus constiture maps from 2 to 3 dimensions, so we can use them to map from position to RGB color:
 ```
-pTorus().out()
+pTorus(1, .2, .1).out()
 ```
-Lastly, surfaces can be represented with implicit equations (closely related to Signed Distance Fields). These are maps from 3 to 1 dimensions, enabling us to map from rgb to greyscale. 
+Here the first parameter corresponds to the time frequency, and the next two correspond to $c$ and $a$, respectively.
+
+Surfaces can be represented with implicit equations (closely related to Signed Distance Fields). These are maps from 3 to 1 dimensions, enabling us to map from rgb to greyscale. A sphere can be represented implicitly with the equation
+$$
+f(x,y,z) = x^2 + y^2 + z^2 - 1.0
+$$
+The following code converts the RGB colors produced by a parametric sphere to greyscale with an implicit Torus:
 ```
 pSphere().iTorus().out()
 ```
@@ -48,6 +68,43 @@ pTorus().
   iSphere().
   out()
 ```
+We can modulate screen coordinates with RGB textures using inverse parametric surfaces and parametric hypersurfaces. To obtain an inverse parametric surface, we solve for the two control parameters in the equation for a parametric surfaces. FOr example, if we consider the above equations for a torus and solve for $\theta$ and $\phi$ we get
+
+$$
+\theta = \arctan(y/x)
+$$
+
+$$
+\phi = \arcsin(z/a)
+$$
+
+We scale screen coordinates with the two values obtained at every point. A code example:
+```
+iDevil().ipCylinder(pCrossCap().repeat()).out()
+```
+Finally, to parameterize a four dimensional hypersurface we use three control parameters. For example we can obtain a 3-sphere with the equations:
+
+$$
+x(\theta_1, \theta_2, \theta_3) = R\cos(\theta_1)
+$$
+
+$$
+y(\theta_1, \theta_2, \theta_3) = R\sin(\theta_1)\cos(\theta_2)
+$$
+
+$$
+z(\theta_1, \theta_2, \theta_3) = R\sin(\theta_1)\sin(\theta_2)\cos(\theta_3)
+$$
+
+$$
+w(\theta_1, \theta_2, \theta_3) = R\sin(\theta_1)\sin(\theta_2)\sin(\theta_3).
+$$
+
+Thus a parametric 4d surface takes three inputs and spits out four outputs, so we can use it as a map taking a RGB color as input and outputting the entries of 2x2 matrix, transforms screen position:
+```
+iSpiral(1, .5).hpCone(pMobiusStrip(1, 7).pSpiral(iCircle()), .6).out()
+```
+
 You can see all of the available functions and their parameters in HydraFCS.js. Feel free to reach out, raise an issue, or PR.
 ## List of Functions and their default parameters
 ### Implicit Curves
