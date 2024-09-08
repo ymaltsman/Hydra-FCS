@@ -1287,3 +1287,292 @@ setFunction({
       return s;
     `,
   })
+
+//explicit curves
+setFunction({
+    name: 'eCircle',
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 1.0,
+      },
+        {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+        },
+        
+    ],
+    glsl:
+    `   
+        float u = sqrt(abs(a - length(_c0)*length(_c0)));
+        u = fract(u-freq*time);
+        return vec4(u, u, u, 1.0);`
+})
+
+setFunction({
+    name: 'eBicorn',
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 1.0,
+      },
+       
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = (2.0 - 2.0*u*u + abs(sqrt(1.0- 3.0*pow(u,2.0) + 3.0*pow(u, 4.0) - pow(u, 6.0))));
+        c = c/(3.0 + u*u);
+		c = fract(c-freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'eCatenary',
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 1.0,
+      },
+       
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = (pow(2.718, u) + pow(2.718, -u))/2.0;
+		c = fract(c-freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'eCissoid',
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 1.0,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 2.0,
+      },
+       
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = abs(sqrt(pow(u, 3.0)/(2.0*a - u)));
+		c = fract(c-freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+
+setFunction({
+    name: 'eLame', //Lamé curve
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'n',
+        default: 2.5,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 3.0,
+      },
+       {
+        type: 'float',
+        name: 'b',
+        default: 2.0,
+      },
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = b*abs(time-pow(1.0-abs(pow(u/a, n)), 1.0/n));
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'eNewton', //Newton's Diverging Parabola
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'g',
+        default: 0.4,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+       {
+        type: 'float',
+        name: 'b',
+        default: 0.8,
+      },
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = (1.0/a)*sqrt(abs(u*(u*u - 2.0*b*u + g)));
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'ePearl', //Pearls of Sluze
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'k',
+        default: 1,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+       {
+        type: 'float',
+        name: 'n',
+        default: 1,
+      },
+      {
+        type: 'float',
+        name: 'm',
+        default: 1,
+      },
+      {
+        type: 'float',
+        name: 'p',
+        default: 1,
+      },
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = pow( k*pow(a - u, p)*pow(u, m), 1.0/n);
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'ePear', //Pear shaped quartic
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+       {
+        type: 'float',
+        name: 'b',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 9.0,
+      },
+      
+   
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+    	float c = (1.0/b)*sqrt(pow(u, 3.0)*(a-u));
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+
+setFunction({
+    name: 'eStrophoid',
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 5.0,
+      },
+      
+   
+        
+    ],
+    glsl:
+    `   
+    	float u = length(_c0);
+        float k = a*step(2.0, a);
+        k += 2.0*step(a, 2.0);
+    	float c = sqrt(u*u*(k - u)/(k + u));
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
+
+setFunction({
+    name: 'eTrisectrix', //trisectrix of Maclaurin
+    type: 'color',
+    inputs: [  
+      {
+        type: 'float',
+        name: 'freq',
+        default: 2.0,
+      },
+      {
+        type: 'float',
+        name: 'a',
+        default: 1.0,
+      },
+      
+   
+        
+    ],
+    glsl:
+    `   
+    	float u = mod(length(_c0), sin(.1*freq*time));//messed with this a bit since it was looking similar to other ones
+        float c = sqrt(u*u*(3.0*a - u)/(a+u));
+		c = fract(c- freq*time);
+        return vec4(c, c, c, 1.0);`
+})
