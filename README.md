@@ -2,7 +2,7 @@
 Functional Curves and Surfaces (FCS) is an extension to Hydra for composing patterns inspired by algebraic geometry.
 To create visuals with FCS, go to [Hydra](https://hydra.ojack.xyz/) and include the following line at the top:
 ```
-await loadScript("https://cdn.statically.io/gh/ymaltsman/Hydra-FCS/3449358/HydraFCS.js")
+await loadScript("https://cdn.statically.io/gh/ymaltsman/Hydra-FCS/3d96bff/HydraFCS.js")
 ```
 FCS consists of four types of functions which can be composed with each other and with other Hydra functions to create time varying visual patterns: implicit curves, parametric curves, implicit surfaces, and parametric surfaces.
 
@@ -18,7 +18,18 @@ iCircle(1).out()
 ```
 Changing the number in the parantheses changes the frequency of the visual.
 
-Some curves can also be represented parametrically, or explicitly. For example, we can draw a circle by plotting the points
+For some implicit equations, we can rearrange them to solve for $y$ \textit{explicitly} as a function of $x$. With the circle example above, if we set the function to 0 and solve for $y$ we get
+
+$$
+y = \pm \sqrt{1 - x^2}
+$$
+
+Explicit equations offer a map from one dimension to one dimension, which we utilize as a map from greyscale color space to itself. For example:
+```
+iCissoid().eCircle(2, 5).eStrophoid(1,10).out()
+```
+
+Some curves can also be represented parametrically. For example, we can draw a circle by plotting the points
 
 $$
 x(t) = cos(t)
@@ -32,6 +43,8 @@ for $t \in [0, 2\pi]$. Parametric equations are maps from 1 to 2 dimensions, so 
 ```
 iCircle().pSpiral(iCardioid()).out()
 ```
+
+
 Surfaces can also be represented parametrically with two control parameters. For example, one can construct a torus of outer radius $c$ and tube radius $a$ by varying the parameters $\theta$ and $\phi$ from $0$ to $2\pi$ and plotting the equations
 
 $$
@@ -100,13 +113,14 @@ $$
 w(\theta_1, \theta_2, \theta_3) = R\sin(\theta_1)\sin(\theta_2)\sin(\theta_3).
 $$
 
-Thus a parametric 4d surface takes three inputs and spits out four outputs, so we can use it as a map taking a RGB color as input and outputting the entries of 2x2 matrix, transforms screen position:
+Thus a parametric 4d surface takes three inputs and spits out four outputs, so we can use it as a map taking a RGB color as input and outputting the entries of 2x2 matrix, transforming screen position:
 ```
 iSpiral(1, .5).hpCone(pMobiusStrip(1, 7).pSpiral(iCircle()), .6).out()
 ```
 
 You can see all of the available functions and their parameters in HydraFCS.js. Feel free to reach out, raise an issue, or PR.
-## List of Functions and their default parameters
+## List of Functions and their default parameters 
+This is not even close to an exhaustive list of cool curves and surfaces that are out there See e.g. [fifty famous curves](https://elepa.me/wp-content/uploads/2013/11/fifty-famous-curves.pdf) and [3DXM surface gallery](https://virtualmathmuseum.org/Surface/gallery_o.html). Feel free to add more functions to the library. There are also potentially other interesting ways of mapping curves and surfaces to visuals, and if you have any ideas feel free to reach out to me or raise an issue to discuss.
 ### Implicit Curves
 The convention for implicit curves is that frequency in time is always the first parameter.
 ```
@@ -143,6 +157,20 @@ pNephroid(1)
 pPlateau(2,1)
 pTalbot(1)
 ```
+### Explicit Curves
+Explicit curves also animate over time, and the first parameter is always the temporal frequency.
+```
+eCircle(1,1)
+eBicorn(1)
+eCatenary(1)
+eCissoid(1,2)
+eLame(2, 2.5, 3, 2)
+eNewton(2, .4, 1, .8)
+ePearl(2, 1, 1, 1, 1, 1)
+ePear(2, 2, 9)
+eStrophoid(2, 5)
+eTrisectrix(2, 1)
+```
 ### Parametric Surfaces
 As with implicit curves (above), the convention here is that the first parameter is frequency in time.
 ```
@@ -163,4 +191,20 @@ iPlane(1,1,1)
 iSteiner(1)
 iWineGlass(3.2)
 iGenus2()
+```
+### Inverse Parametric Surfaces
+```
+ipSphere(1)
+ipTorus(1)
+ipMobiusStrip()
+ipCylinder()
+ipKleinBottle()
+ipCrossCap(1)
+```
+### Parametric Hypersurfaces
+```
+hpSphere(1)
+hpTorus(1, .5)
+hpCone(1)
+hpConeOblique(1,1,1,1)
 ```
