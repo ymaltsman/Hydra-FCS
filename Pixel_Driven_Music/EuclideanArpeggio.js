@@ -1,6 +1,6 @@
 await loadScript('https://hyper-hydra.glitch.me/hydra-pixels.js')
 await loadScript("https://cdn.jsdelivr.net/gh/atfornes/Hydra-strudel-extension@1/hydra-strudel.js")
-await loadScript("https://cdn.statically.io/gh/ymaltsman/Hydra-FCS/3449358/HydraFCS.js")
+await loadScript("https://cdn.statically.io/gh/ymaltsman/Hydra-FCS/55a80a3/HydraFCS.js")
 await initHydraStrudel();
 
 update = ()=> {
