@@ -1,5 +1,6 @@
 # Hydra-FCS
-Functional Curves and Surfaces (FCS) is an extension to Hydra for composing patterns inspired by algebraic geometry.
+Functional Curves and Surfaces (FCS) is an extension to Hydra for composing patterns inspired by algebraic geometry, described in a paper for [the International Conference on Functional Art, Music, Modelling, and Design](https://dl.acm.org/doi/10.1145/3677996.3678292).
+
 To create visuals with FCS, go to [Hydra](https://hydra.ojack.xyz/) and include the following line at the top:
 ```
 await loadScript("https://cdn.statically.io/gh/ymaltsman/Hydra-FCS/35549eb/HydraFCS.js")
