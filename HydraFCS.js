@@ -379,23 +379,6 @@ setFunction({
   `
 })
 
-setFunction({
-  name: 'pClelia',
-  type: 'color',
-  inputs: [
-   {type: 'float', name: 'n', default: 1.33}],
-  glsl: `
-    
-      float u = length(_c0);
-      float r = 0.3;
-      float x = cos(n*u)*cos(u);
-      float y = cos(n*u)*sin(u);
-      float z = sin(n*u);
-      vec3 p = normalize(vec3(x,y,z));
-      p = .5*p + .5;
-      return vec4(p, 1.0);
-  `
-})
 
 setFunction({
   name: 'rotateRGB',
@@ -426,5 +409,151 @@ setFunction({
       return vec4(d,1.0);
   `
 })
+
+//parametric surfaces
+
+setFunction({
+  name: 'pSphere',
+  type: 'src',
+  inputs: [
+    {type: 'float', name: 'CosF', default: 0.0},
+    {type: 'float', name: 'SinF', default: 0.0},
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float x = (_st.x*2.0*3.14);
+      float y = (_st.y*2.0*3.14);
+      float r = 0.5 + .5*cos(x - CosF*time)*sin(y-SinF*time);
+      float g = .5 + .5*sin(x-SinF*time)*sin(y - SinF*time);
+      float b = .5 + .5*cos(y - CosF*time);
+      return vec4(r, g, b, 1.0);
+    `,
+})
+
+setFunction({
+  name: 'pMobiusStrip',
+  type: 'src',
+  inputs: [ 
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float x = (_st.x*2.0*3.14);
+      float y = _st.y - .5;
+      float r = .5 + (.3 + y/2.0*cos(x/2.0))*cos(x);
+      float g = .5 + (.3 + y/2.0*cos(x/2.0))*sin(x);
+      float b = .3 + sin(x/2.0)*y/2.0;
+      return vec4(r, g, b, 1.0);
+    `,
+})
+
+setFunction({
+  name: 'pKleinBottle',
+  type: 'src',
+  inputs: [
+    {type: 'float', name: 'freq', default: 1.0},
+    {
+      type: 'float',
+      name: 'r',
+      default: 0.5,
+    },
+    
+    
+
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float u = (_st.x*2.0*3.14);
+      float v = (_st.y*2.0*3.14);
+      
+    float x = (r + cos(u / 2.0) * sin(v) - sin(u / 2.0) * sin(2.0 * v)) * cos(u);
+    float y = (r + cos(u / 2.0) * sin(v) - sin(u / 2.0) * sin(2.0 * v)) * sin(u);
+    float z = sin(u / 2.0) * sin(v) + cos(u / 2.0) * sin(2.0 * v);
+      vec3 col = vec3(x,y,z) + 1.0;
+      col = normalize(col);
+      return vec4(col, 1.0);
+    `,
+})
+
+setFunction({
+  name: 'pCrossCap',
+  type: 'src',
+  inputs: [
+    {type: 'float', name: 'freq', default: 1.0},
+    {
+      type: 'float',
+      name: 'aa',
+      default: 1.0,
+    },
+    
+    
+
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float u = (_st.x*2.0*3.14);
+      float v = (_st.y*2.0*3.14);
+      float r = (aa * aa) * (sin(u) * sin(2.0 * v) / 2.0);
+      float g = (aa * aa) * (sin(2.0 * u) * cos(v) * cos(v));
+      float b = (aa * aa) * (cos(2.0 * u) * cos(v) * cos(v));
+      vec3 col = vec3(r,g,b) + 1.0;
+      col = normalize(col);
+      return vec4(col, 1.0);
+    `,
+})
+
+setFunction({
+  name: 'pSteiner',
+  type: 'src',
+  inputs: [
+    {type: 'float', name: 'freq', default: 1.0},
+    {
+      type: 'float',
+      name: 'aa',
+      default: 1.0,
+    },
+    
+    
+
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float u = (_st.x*2.0*3.14);
+      float v = (_st.y*2.0*3.14);
+      float r = (aa * aa / 2.0) * (sin(2.0 * u) * cos(v) * cos(v));
+      float g = (aa * aa / 2.0) * (sin(u) * sin(2.0 * v));
+      float b = (aa * aa / 2.0) * (cos(u) * sin(2.0 * v));
+      vec3 col = vec3(r,g,b) + 1.0;
+      col = normalize(col);
+      return vec4(col, 1.0);
+    `,
+})
+
+setFunction({
+  name: 'pTorus',
+  type: 'src',
+  inputs: [
+    {type: 'float', name: 'freq', default: 1.0},
+    {
+      type: 'float',
+      name: 'a',
+      default: 1.0,
+    },
+    {
+      type: 'float', name: 'c', default: .5,
+    },
+  ],
+  glsl: `
+      _st = _st * 2.0 - 1.0;
+      float u = (_st.x*2.0*3.14);
+      float v = (_st.y*2.0*3.14);
+      float r = (c + a*cos(v))*cos(u);
+      float g = (c + a*cos(v))*sin(u);
+      float b = a*sin(v);
+      vec3 col = vec3(r,g,b) + 1.0;
+      col = normalize(col);
+      return vec4(col, 1.0);
+    `,
+})
+
 
 //iCissoid().pEpicycloid(iCircle()).pSphericalHelix().out()
