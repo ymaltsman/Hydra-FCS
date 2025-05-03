@@ -660,4 +660,262 @@ setFunction({
   `
 })
 
+
+
+setFunction({
+  name: 'ipSphere',
+  type: 'combineCoord',
+  inputs: [
+    {type: 'float', name: 'e', default: 0.1},
+    {type: 'float', name: 'a', default: 1.0},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x = atan(g/r); 
+    float y = acos(b/a);
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
+setFunction({
+  name: 'ipTorus',
+  type: 'combineCoord',
+  inputs: [
+    {type: 'float', name: 'e', default: 0.1},
+    {type: 'float', name: 'a', default: 1.0},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x = atan(g/r); 
+    float y = asin(b/a);
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
+setFunction({
+  name: 'ipMobiusStrip',
+  type: 'combineCoord',
+  inputs: [
+    {type: 'float', name: 'e', default: 0.1},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x = atan(g/r); 
+    float y = b/sin(x/2.0);
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
+setFunction({
+  name: 'ipCylinder',
+  type: 'combineCoord',
+  inputs: [
+    {type: 'float', name: 'e', default: 0.1},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x = r; 
+    float y = atan(b/g);
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
+setFunction({
+  name: 'ipKleinBottle',
+  type: 'combineCoord',
+  inputs: [
+    {type: 'float', name: 'e', default: 0.1},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float y = atan(g/r); 
+    float x = 2.0 * atan ( ((b / sin(y/2.0)) - cos(y/2.0) * tan(y))/ (sin(y/2.0) * (1.0 + tan(y)*tan(y))) );
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
+setFunction({
+  name: 'ipCrossCap',
+  type: 'combineCoord',
+  inputs: [
+    
+    {type: 'float', name: 'e', default: 0.1},
+    {type: 'float', name: 'a', default: 1.0},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x = 0.5*atan(g/b);
+    float y = 0.5*asin((2.0/(a*a))*r*(1.0/sin(x)));
+    
+    return vec2(x + e*_st.x, y + e*_st.y);
+  `,
+})
+
 //iCissoid().pEpicycloid(iCircle()).pSphericalHelix().out()
+
+//parametric hypersurfaces 
+
+setFunction({
+  name: 'hpSphere',
+  type: 'color',
+  inputs: [
+    {type: 'float', name: 'a', default: 1.0},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x11 = a*cos(r);
+    float x12 = a*sin(r)*cos(g);
+    float x21 = a*sin(g)*cos(b);
+    float x22 = a*sin(r)*sin(g)*sin(b);
+    vec4 s = vec4(x11, x12, x21, x22) + 1.0;
+    s = normalize(s);
+    
+
+    
+    return s;
+  `,
+})
+
+setFunction({
+  //source: https://people.math.harvard.edu/~knill/teaching/math22a2018/exhibits/threetorus/index.html
+  name: 'hpTorus',
+  type: 'color',
+  inputs: [
+    {type: 'float', name: 'c', default: 1.0},
+    {type: 'float', name: 'a', default: .5},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x11 = (c + a*cos(r))*cos(g);
+    float x12 = (c + a*cos(r))*sin(g);
+    float x21 = (c + a*sin(r))*cos(b);
+    float x22 = (c + a*sin(r))*sin(b);
+    vec4 s = vec4(x11, x12, x21, x22) + 1.0;
+    s = normalize(s);
+    
+    return s;
+  `,
+})
+
+setFunction({
+  //source: https://en.wikipedia.org/wiki/Hypercone
+  name: 'hpCone',
+  type: 'color',
+  inputs: [
+    {type: 'float', name: 'c', default: 1.0},
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x11 = b*c*cos(r)*cos(g);
+    float x12 = b*c*cos(r)*sin(g);
+    float x21 = b*c*sin(r);
+    float x22 = b;
+    vec4 s = vec4(x11, x12, x21, x22);
+    s = normalize(s + 1.0);
+    
+    return s;
+  `,
+})
+
+
+setFunction({
+name: 'rotateRGBA',
+type: 'color',
+inputs: [
+  { type: 'float', name: 'a', default: 0.5 },
+  { type: 'float', name: 'b', default: 0.5 },
+  { type: 'float', name: 'c', default: 0.5 },
+  { type: 'float', name: 'd', default: 0.5 }
+],
+glsl: `
+  mat4 mx = mat4(
+    1.0,     0.0,       0.0,       0.0,
+    0.0,     cos(a),   -sin(a),    0.0,
+    0.0,     sin(a),    cos(a),    0.0,
+    0.0,     0.0,       0.0,       1.0
+  );
+
+  mat4 my = mat4(
+    cos(b),  0.0,     sin(b),    0.0,
+    0.0,     1.0,     0.0,       0.0,
+   -sin(b),  0.0,     cos(b),    0.0,
+    0.0,     0.0,     0.0,       1.0
+  );
+
+  mat4 mz = mat4(
+    cos(c), -sin(c),  0.0,      0.0,
+    sin(c),  cos(c),  0.0,      0.0,
+    0.0,     0.0,     1.0,      0.0,
+    0.0,     0.0,     0.0,      1.0
+  );
+
+  mat4 mw = mat4(
+    cos(d), 0.0,   0.0,   -sin(d),
+    0.0,    1.0,   0.0,    0.0,
+    0.0,    0.0,   1.0,    0.0,
+    sin(d), 0.0,   0.0,    cos(d)
+  );
+
+  vec4 k = _c0 * mx * my*mz*mw;
+  return k;
+  `,
+})
+
+
+
+setFunction({
+  //source: https://en.wikipedia.org/wiki/Hypercone
+  name: 'hpConeOblique',
+  type: 'color',
+  inputs: [
+    {type: 'float', name: 'c', default: 1.0},
+    {type: 'float', name: 'vx', default: 1.0},
+    {type: 'float', name: 'vy', default: 1.0},
+    {type: 'float', name: 'vz', default: 1.0},
+    
+  ], 
+  glsl: `
+    float r = _c0.r;
+    float g = _c0.g;
+    float b = _c0.b;
+    
+    float x11 = vx*b + b*c*cos(r)*cos(g);
+    float x12 = vy*b + b*c*cos(r)*sin(g);
+    float x21 = b*vz + b*c*sin(r);
+    float x22 = b;
+    vec4 s = vec4(x11, x12, x21, x22);  
+    return s;
+  `,
+})
