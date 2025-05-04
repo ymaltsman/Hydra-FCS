@@ -496,16 +496,16 @@ setFunction({
   name: 'pSphere',
   type: 'src',
   inputs: [
-    {type: 'float', name: 'CosF', default: 0.0},
-    {type: 'float', name: 'SinF', default: 0.0},
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
   ],
   glsl: `
       _st = _st * 2.0 - 1.0;
       float x = (_st.x*2.0*3.14);
       float y = (_st.y*2.0*3.14);
-      float r = 0.5 + .5*cos(x - CosF*time)*sin(y-SinF*time);
-      float g = .5 + .5*sin(x-SinF*time)*sin(y - SinF*time);
-      float b = .5 + .5*cos(y - CosF*time);
+      float r = 0.5 + .5*cos(x*cos(cosF*(time-x)))*sin(y);
+      float g = .5 + .5*sin(x)*sin(y);
+      float b = .5 + .5*cos(y*sin(sinF*(time-r/g)+ 3.14/2.0));
       return vec4(r, g, b, 1.0);
     `,
 })
@@ -514,15 +514,19 @@ setFunction({
   name: 'pMobiusStrip',
   type: 'src',
   inputs: [ 
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
+    {type: 'float', name: 'R', default: 1.0}
   ],
   glsl: `
-      _st = _st * 2.0 - 1.0;
       float x = (_st.x*2.0*3.14);
       float y = _st.y - .5;
-      float r = .5 + (.3 + y/2.0*cos(x/2.0))*cos(x);
-      float g = .5 + (.3 + y/2.0*cos(x/2.0))*sin(x);
-      float b = .3 + sin(x/2.0)*y/2.0;
-      return vec4(r, g, b, 1.0);
+      float r = (R + y*cos(x/2.0))*cos(x-cosF*time);
+      float g = (R + y*cos(x/2.0))*sin(x + sinF*time);
+      float b = sin(x/2.0)*y;
+      vec3 col = vec3(r, g, b) + 1.0;
+      col = normalize(col);
+      return vec4(col, 1.0);
     `,
 })
 
@@ -530,7 +534,8 @@ setFunction({
   name: 'pKleinBottle',
   type: 'src',
   inputs: [
-    {type: 'float', name: 'freq', default: 1.0},
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
     {
       type: 'float',
       name: 'r',
@@ -543,8 +548,8 @@ setFunction({
   glsl: `
       _st = _st * 2.0 - 1.0;
       float u = (_st.x*2.0*3.14);
-      float v = (_st.y*2.0*3.14);
-      
+      float v = (_st.y*2.0*3.14)+sin(sinF*time-sinF*u);
+      u += cosF*cos(cosF*time-v*u);
     float x = (r + cos(u / 2.0) * sin(v) - sin(u / 2.0) * sin(2.0 * v)) * cos(u);
     float y = (r + cos(u / 2.0) * sin(v) - sin(u / 2.0) * sin(2.0 * v)) * sin(u);
     float z = sin(u / 2.0) * sin(v) + cos(u / 2.0) * sin(2.0 * v);
@@ -558,7 +563,8 @@ setFunction({
   name: 'pCrossCap',
   type: 'src',
   inputs: [
-    {type: 'float', name: 'freq', default: 1.0},
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
     {
       type: 'float',
       name: 'aa',
@@ -572,7 +578,10 @@ setFunction({
       _st = _st * 2.0 - 1.0;
       float u = (_st.x*2.0*3.14);
       float v = (_st.y*2.0*3.14);
+      
+      aa += sinF*(u/sin(sinF*time-u));
       float r = (aa * aa) * (sin(u) * sin(2.0 * v) / 2.0);
+      v += cosF*cos(cosF*time + u*r);
       float g = (aa * aa) * (sin(2.0 * u) * cos(v) * cos(v));
       float b = (aa * aa) * (cos(2.0 * u) * cos(v) * cos(v));
       vec3 col = vec3(r,g,b) + 1.0;
@@ -585,7 +594,8 @@ setFunction({
   name: 'pSteiner',
   type: 'src',
   inputs: [
-    {type: 'float', name: 'freq', default: 1.0},
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
     {
       type: 'float',
       name: 'aa',
@@ -599,6 +609,8 @@ setFunction({
       _st = _st * 2.0 - 1.0;
       float u = (_st.x*2.0*3.14);
       float v = (_st.y*2.0*3.14);
+      u += cosF*fract(u/v - cosF*time);
+      aa += sinF*sin(sinF*time-u*mod(sin(u)*sin(v-sinF*time), cos(v)));
       float r = (aa * aa / 2.0) * (sin(2.0 * u) * cos(v) * cos(v));
       float g = (aa * aa / 2.0) * (sin(u) * sin(2.0 * v));
       float b = (aa * aa / 2.0) * (cos(u) * sin(2.0 * v));
@@ -612,7 +624,8 @@ setFunction({
   name: 'pTorus',
   type: 'src',
   inputs: [
-    {type: 'float', name: 'freq', default: 1.0},
+    {type: 'float', name: 'cosF', default: 0.0},
+    {type: 'float', name: 'sinF', default: 0.0},
     {
       type: 'float',
       name: 'a',
@@ -627,7 +640,9 @@ setFunction({
       float u = (_st.x*2.0*3.14);
       float v = (_st.y*2.0*3.14);
       float r = (c + a*cos(v))*cos(u);
+      u += sin(sinF*time - r);
       float g = (c + a*cos(v))*sin(u);
+      v += cos(cosF*time - g);
       float b = a*sin(v);
       vec3 col = vec3(r,g,b) + 1.0;
       col = normalize(col);
