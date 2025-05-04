@@ -1,3 +1,4 @@
+//parametric curves
 setFunction({
   name: 'pAstroid',
   type: 'combineCoord',
@@ -170,7 +171,16 @@ setFunction({
   name: 'iCardioid',
   type: 'src',
   inputs: [
-      
+    {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a',
@@ -183,7 +193,7 @@ setFunction({
       _st = _st*2.0 - 1.0;
       float x = _st.x;
       float y = _st.y;
-      float u = pow(x*x + y*y - 2.0*a*x, 2.0) - 4.0*a*a*(x*x - y*y);
+      float u = pow(x*x + y*y - 2.0*a*sin(time*sinF + 3.14/2.0)*x, 2.0) - 4.0*a*a*cos(cosF*time)*(x*x - y*y);
       return vec4(u, u, u, 1.0);`
 })
 
@@ -191,6 +201,16 @@ setFunction({
   name: 'iBicorn',
   type: 'src',
   inputs: [
+    	 {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a_exp',
@@ -208,7 +228,7 @@ setFunction({
       _st = _st*4.0 - 2.0;
       float x = _st.x;
       float y = _st.y;
-      float u = y*y*(a*a - x*x) - pow(x*x + 2.0*a*y - a, 2.0*a_exp);
+      float u = y*y*(a*a*cos(time*cosF) - x*x) - pow(x*x + 2.0*a*sin(3.14/2.0 + sinF*time)*y - a, 2.0*a_exp);
       return vec4(u, u, u, 1.0);`
 })
 
@@ -216,6 +236,16 @@ setFunction({
   name: 'iAstroid',
   type: 'src',
   inputs: [
+     {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'amp',
@@ -227,7 +257,7 @@ setFunction({
       _st = _st*2.0 - 1.0;
       float x = _st.x;
       float y = _st.y;
-      float u = pow(pow(x, 2.0), .33) + pow(pow(y, 2.0), .33)- pow(pow(amp, 2.0), .33);
+      float u = pow(pow(x, 2.0), .33*sin(time*sinF + 3.14/2.0)) + pow(pow(y, 2.0), .33)- pow(pow(amp*cos(time*cosF), 2.0), .33);
       return vec4(u, u, u, 1.0);`
   })
 
@@ -235,6 +265,16 @@ setFunction({
   name: 'iCircle',
   type: 'src',
   inputs: [
+     {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
     {type: 'float', name: 'r', default: 1.0}
   ],
   glsl:
@@ -242,7 +282,7 @@ setFunction({
       _st = _st*2.0 - 1.0;
       float x = _st.x;
       float y = _st.y;
-      float u = x*x + y*y - r;
+      float u = x*x*sin(time*sinF + 3.14/2.0) + y*y - r*cos(time*cosF);
       return vec4(u, u, u, 1.0);`
   })
 
@@ -250,6 +290,16 @@ setFunction({
   name: 'iSextic',
   type: 'src',
   inputs: [
+     {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a',
@@ -263,7 +313,8 @@ setFunction({
       float y = _st.y;
       float r = length(_st);
       float theta = atan(y/x);
-      float u = r - 4.0*a*pow(cos(theta/3.0), 3.0);
+      float u = r - 4.0*a*cos(cosF*time)*pow(cos((theta)/3.0 - sinF*time), 3.0);
+      
       return vec4(u, u, u, 1.0);`
   })
 
@@ -271,6 +322,16 @@ setFunction({
   name: 'iCassOval',
   type: 'src',
   inputs: [
+    	  {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a',
@@ -287,7 +348,7 @@ setFunction({
       _st = _st*2.0 - 1.0;
       float x = _st.x;
       float y = _st.y;
-      float u = pow(x*x + y*y, 2.0) - 2.0*a*a*(x*x - y*y) - pow(a, 4.0) + pow(c, 4.0);
+      float u = pow(x*x + y*y, 2.0*cos(time*cosF)) - 2.0*a*a*sin(time*sinF + 3.14/2.0)*(x*x - y*y) - pow(a, 4.0) + pow(c, 4.0);
       
       return vec4(u, u, u, 1.0);`
   })
@@ -297,6 +358,16 @@ setFunction({
   name: 'iCochleoid',
   type: 'src',
   inputs: [
+      {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a',
@@ -310,7 +381,7 @@ setFunction({
       float y = _st.y;
       float r = length(_st);
       float theta = atan(y/x);
-      float u = r - a*(sin(theta)/(theta));
+      float u = r - a*sin(sinF*time + 3.14/2.0)*(sin(theta - cosF*time)/(theta));
       return vec4(u, u, u, 1.0);`
   })
 
@@ -319,6 +390,16 @@ setFunction({
   name: 'iCissoid',
   type: 'src',
   inputs: [
+      {
+      type: 'float',
+      name: 'sinF',
+      default: 0.0,
+      },
+    {
+      type: 'float',
+      name: 'cosF',
+      default: 0.0,
+      },
       {
       type: 'float',
       name: 'a',
@@ -332,10 +413,9 @@ setFunction({
       float y = _st.y;
       float r = length(_st);
       float theta = atan(y/x);
-      float u = r - 2.0*a*tan(theta)*sin(theta);
+      float u = r - 2.0*a*tan(theta*cos(time*cosF))*sin(theta-sinF*time);
       return vec4(u, u, u, 1.0);`
   })
-
 
 
 setFunction({
